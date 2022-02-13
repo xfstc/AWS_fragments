@@ -5,11 +5,11 @@ const express = require('express');
 // version and author from package.json
 const { version, author } = require('../../package.json');
 const { authenticate } = require('../authorization');
+const { createSuccessResponse } = require('../response');
 
 // Create a router that we can use to mount our API
 const router = express.Router();
 
-const { createSuccessResponse } = require('../response');
 /**
  * Expose all of our API routes on /v1/* to include an API version.
  */
