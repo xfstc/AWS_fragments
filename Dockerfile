@@ -1,10 +1,12 @@
 #This is a text file that will define all of the Docker instructions necessary for Docker Engine to build an image of your service.
 
-# Use node version 16.13.2
-FROM node:16.13.2
+# Use node version node:16.14-alpine
+FROM node:16.14-alpine@sha256:2c6c59cf4d34d4f937ddfcf33bab9d8bbad8658d1b9de7b97622566a52167f2b AS dependencies
 
 LABEL maintainer="Lingxiang Fan <lfan22@myseneca.ca>"
 LABEL description="Fragments node.js microservice"
+
+ENV NODE_ENV=production
 
 # We default to use port 8080 in our service
 ENV PORT=8080
@@ -24,7 +26,15 @@ WORKDIR /app
 COPY package*.json /app/
 
 # Install node dependencies defined in package-lock.json
-RUN npm install
+RUN npm ci --only=production
+
+##########################################################################
+FROM node:16.14-alpine@sha256:2c6c59cf4d34d4f937ddfcf33bab9d8bbad8658d1b9de7b97622566a52167f2b AS builder
+
+WORKDIR /app
+
+# Copy cached dependencies from previous stage so we don't have to download
+COPY --from=dependencies /app /app
 
 # Copy src to /app/src/
 COPY ./src ./src
@@ -33,7 +43,9 @@ COPY ./src ./src
 COPY ./tests/.htpasswd ./tests/.htpasswd
 
 # Start the container by running our server
-CMD npm run start
+CMD npm start
 
 # We run our service on port 8080
 EXPOSE 8080
+
+
