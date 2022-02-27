@@ -28,6 +28,7 @@ COPY package*.json /app/
 # Install node dependencies defined in package-lock.json
 RUN npm ci --only=production
 
+
 ##########################################################################
 FROM node:16.14-alpine@sha256:2c6c59cf4d34d4f937ddfcf33bab9d8bbad8658d1b9de7b97622566a52167f2b AS builder
 
@@ -42,8 +43,10 @@ COPY ./src ./src
 # Copy our HTPASSWD file
 COPY ./tests/.htpasswd ./tests/.htpasswd
 
+RUN apk add dumb-init
+
 # Start the container by running our server
-CMD npm start
+CMD ["dumb-init", "node", "/app/src/server.js"]
 
 # We run our service on port 8080
 EXPOSE 8080

@@ -184,7 +184,9 @@ class Fragment {
    */
   static isSupportedType(value) {
     // TODO
-    if (value == 'text/plain' || value == 'text/plain; charset=utf-8') {
+    const textType = new RegExp('^text/*');
+    //if (value == 'text/plain' || value == 'text/plain: charset=utf-8') {
+    if (textType.test(value) || value == 'application/json') {
       return true;
     }
     return false;
