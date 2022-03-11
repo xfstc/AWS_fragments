@@ -43,7 +43,7 @@ COPY ./src ./src
 # Copy our HTPASSWD file
 COPY ./tests/.htpasswd ./tests/.htpasswd
 
-RUN apk add --no-cache dumb-init=1.2.5
+RUN apk --no-cache add dumb-init=1.2.5
 
 # Start the container by running our server
 CMD ["dumb-init", "node", "/app/src/server.js"]
