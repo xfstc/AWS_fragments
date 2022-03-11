@@ -20,8 +20,6 @@ describe('GET /v1/fragments', () => {
     expect(Array.isArray(res.body.fragments)).toBe(true);
   });
 
-  // TODO: we'll need to add tests to check the contents of the fragments array later
-
   // when expand = 1, all fragments including representations will be returned
   test('when expand = 1, returns all fragments including representations', async () => {
     const res = await request(app)

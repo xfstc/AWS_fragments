@@ -31,4 +31,33 @@ describe('GetById /fragments/:_id', () => {
     const res = await request(app).get(`/v1/fragments/111`).auth('user1@email.com', 'password1');
     expect(res.statusCode).toBe(404);
   });
+
+  // If the id contains .txt extension then the corresponding type of data is returned
+  test('return data in the appropriate format for the id with the extension', async () => {
+    const postRes = await request(app)
+      .post('/v1/fragments')
+      .auth('user1@email.com', 'password1')
+      .set('content-type', 'text/plain');
+    const id = postRes.body.fragment.id;
+
+    const res = await request(app)
+      .get(`/v1/fragments/${id}.txt`)
+      .auth('user1@email.com', 'password1');
+    expect(res.type).toBe('text/plain');
+  });
+
+  // If the id contains .md extension then the corresponding type of data is returned
+  test('return data in the appropriate format for the id with the extension', async () => {
+    const postRes = await request(app)
+      .post('/v1/fragments')
+      .auth('user1@email.com', 'password1')
+      .set('content-type', 'text/markdown');
+    const id = postRes.body.fragment.id;
+
+    const res = await request(app)
+      .get(`/v1/fragments/${id}.md`)
+      .auth('user1@email.com', 'password1');
+    expect(res.type).toBe('text/markdown');
+  });
+  //
 });

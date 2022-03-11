@@ -17,7 +17,6 @@ const {
 
 class Fragment {
   constructor({ id, ownerId, created, updated, type, size = 0 }) {
-    // TODO
     if (id) {
       this.id = id;
     } else {
@@ -36,7 +35,7 @@ class Fragment {
       if (Fragment.isSupportedType(type)) {
         this.type = type;
       } else {
-        throw new Error('Currently, only text/plain is supported.');
+        throw new Error('Now can create text/* or application/json fragments');
       }
     }
 
@@ -66,7 +65,6 @@ class Fragment {
    * @returns Promise<Array<Fragment>>
    */
   static async byUser(ownerId, expand = false) {
-    // TODO
     try {
       logger.debug({ ownerId, expand }, 'Fragment.byUser()');
       const fragments = await listFragments(ownerId, expand);
@@ -85,11 +83,11 @@ class Fragment {
    * @returns Promise<Fragment>
    */
   static async byId(ownerId, id) {
-    // TODO
     try {
       const result = await readFragment(ownerId, id);
       if (!result) {
-        return Promise.reject(new Error('No fragment found.'));
+        throw new Error('No fragment found.');
+        //return Promise.reject(new Error('No fragment found.'));
       }
 
       return result;
@@ -105,7 +103,6 @@ class Fragment {
    * @returns Promise
    */
   static delete(ownerId, id) {
-    // TODO
     return deleteFragment(ownerId, id);
   }
 
@@ -114,7 +111,6 @@ class Fragment {
    * @returns Promise
    */
   save() {
-    // TODO
     this.updated = new Date().toISOString();
     return writeFragment(this);
   }
@@ -124,7 +120,6 @@ class Fragment {
    * @returns Promise<Buffer>
    */
   getData() {
-    // TODO
     return readFragmentData(this.ownerId, this.id);
   }
 
@@ -134,7 +129,6 @@ class Fragment {
    * @returns Promise
    */
   async setData(data) {
-    // TODO
     try {
       if (!data) {
         return Promise.reject(new Error('Data cannot be empty.'));
@@ -163,7 +157,6 @@ class Fragment {
    * @returns {boolean} true if fragment's type is text/*
    */
   get isText() {
-    // TODO
     const type = new RegExp('^text/*');
     return type.test(this.type);
   }
@@ -173,7 +166,6 @@ class Fragment {
    * @returns {Array<string>} list of supported mime types
    */
   get formats() {
-    // TODO
     return new Array(this.type.split(';')[0]);
   }
 
@@ -183,9 +175,7 @@ class Fragment {
    * @returns {boolean} true if we support this Content-Type (i.e., type/subtype)
    */
   static isSupportedType(value) {
-    // TODO
     const textType = new RegExp('^text/*');
-    //if (value == 'text/plain' || value == 'text/plain: charset=utf-8') {
     if (textType.test(value) || value == 'application/json') {
       return true;
     }

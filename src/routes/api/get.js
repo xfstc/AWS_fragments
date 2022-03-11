@@ -1,17 +1,15 @@
 // src/routes/api/get.js
-const { createSuccessResponse } = require('../../response');
+const { createSuccessResponse, createErrorResponse } = require('../../response');
 const { Fragment } = require('../../model/fragment');
 //const { crypto } = require('crypto');
-const logger = require('../../logger');
 
 /**
  * Get a list of fragments for the current user
  */
 module.exports = async (req, res) => {
-  // TODO: this is just a placeholder to get something working...
   var expand = req.url.search('expand=1');
-  if (expand > 0) {
-    try {
+  try {
+    if (expand > 0) {
       var fragment = await Fragment.byUser(req.user, true);
 
       res.status(200).json(
@@ -19,11 +17,7 @@ module.exports = async (req, res) => {
           fragment,
         })
       );
-    } catch (err) {
-      logger.error(err);
-    }
-  } else {
-    try {
+    } else {
       var fragments = await Fragment.byUser(req.user);
 
       res.status(200).json(
@@ -31,8 +25,8 @@ module.exports = async (req, res) => {
           fragments,
         })
       );
-    } catch (err) {
-      logger.error(err);
     }
+  } catch (err) {
+    res.status(404).json(createErrorResponse(404, err));
   }
 };
