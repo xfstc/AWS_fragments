@@ -20,3 +20,7 @@ docker run --rm --name fragments --env-file env.jest -p 8080:8080 fragments //ru
 hadolint Dockerfile //checks the dockerfile for errors
 
 npm version 0.7.0 -m "Release v0.7.0" //Update project version (e.g., 0.7.0)
+
+docker-compose -f docker-compose.offline.yml up //Off-line mock up of running fragments
+
+docker-compose -f docker-compose.offline.yml up --build //rebuild docker image
