@@ -4,8 +4,10 @@ POST http://localhost:8080/v1/fragments
 Authorization: Basic dXNlcjFAZW1haWwuY29tOnBhc3N3b3JkMQ==
 # We're sending a JSON fragment
 Content-Type: application/json
-# Body of the request goes in ```...``` when it's a string
-```This is a fragment!```
+{
+    "id": 0,
+    "name": "Frieda"
+}
 
 # 1. We expect to get back an HTTP 201
 HTTP/1.1 201
@@ -24,7 +26,7 @@ jsonpath "$.fragment.created" isString
 jsonpath "$.fragment.updated" isString
 jsonpath "$.fragment.type" == "application/json"
 # 19 is the length of our fragment data: 'This is a fragment!'
-jsonpath "$.fragment.size" == 19
+jsonpath "$.fragment.size" == 37
 # Capture the Location URL into a variable named `url`
 [Captures]
 url: header "Location"
@@ -35,6 +37,4 @@ Authorization: Basic dXNlcjFAZW1haWwuY29tOnBhc3N3b3JkMQ==
 
 HTTP/1.1 200
 Content-Type: application/json
-Content-Length: 19
-[Asserts]
-body == "This is a fragment!"
+Content-Length: 37
