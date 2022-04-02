@@ -33,4 +33,6 @@ const rawBody = () =>
 router.post('/fragments', rawBody(), require('./post'));
 // Other routes will go here later on...
 
+router.delete('/fragments/:_id', require('./delete'));
+
 module.exports = router;

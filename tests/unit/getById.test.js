@@ -59,5 +59,4 @@ describe('GetById /fragments/:_id', () => {
       .auth('user1@email.com', 'password1');
     expect(res.type).toBe('text/markdown');
   });
-  //
 });

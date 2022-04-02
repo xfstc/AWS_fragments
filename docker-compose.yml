@@ -13,3 +13,5 @@ services:
       - AWS_COGNITO_POOL_ID
       - AWS_COGNITO_CLIENT_ID
       - HTPASSWD
+      # The S3 Bucket to use
+      - AWS_S3_BUCKET_NAME
