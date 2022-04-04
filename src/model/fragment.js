@@ -176,7 +176,14 @@ class Fragment {
    */
   static isSupportedType(value) {
     const textType = new RegExp('^text/*');
-    if (textType.test(value) || value == 'application/json') {
+    if (
+      textType.test(value) ||
+      value == 'application/json' ||
+      value == 'image/png' ||
+      value == 'image/jpeg' ||
+      value == 'image/webp' ||
+      value == 'image/gif'
+    ) {
       return true;
     }
     return false;
