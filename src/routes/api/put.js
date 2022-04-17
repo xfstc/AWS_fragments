@@ -8,7 +8,7 @@ module.exports = async (req, res) => {
   var id = req.params._id;
 
   try {
-    var fragment = await Fragment.byId(req.user, id);
+    var fragment = new Fragment(await Fragment.byId(req.user, id));
 
     if (fragment.type != type) {
       res.status(400).json(createErrorResponse(400, 'The type cannot be changed after created.'));

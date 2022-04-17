@@ -221,6 +221,7 @@ class Fragment {
     }
   }
 
+  // Returns the corresponding type according to extname
   convertContentType(extname) {
     if (extname == '.txt') {
       return 'text/plain';
@@ -243,6 +244,7 @@ class Fragment {
     }
   }
 
+  // Convert format according to extname
   async convertData(extname) {
     try {
       var data = await this.getData();
