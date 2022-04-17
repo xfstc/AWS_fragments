@@ -57,8 +57,8 @@ Authorization: Basic dXNlcjFAZW1haWwuY29tOnBhc3N3b3JkMQ==
 
 HTTP/1.1 200
 [Asserts]
-jsonpath "$.fragments" includes {{fragment1_id}}
-jsonpath "$.fragments" includes {{fragment2_id}}
+jsonpath "$.fragment" includes {{fragment1_id}}
+jsonpath "$.fragment" includes {{fragment2_id}}
 
 # DELETE the first fragment
 DELETE {{fragment1_url}}
@@ -80,5 +80,5 @@ Authorization: Basic dXNlcjFAZW1haWwuY29tOnBhc3N3b3JkMQ==
 
 HTTP/1.1 200
 [Asserts]
-jsonpath "$.fragments" includes {{fragment2_id}}
-jsonpath "$.fragments" not includes {{fragment1_id}}
+jsonpath "$.fragment" includes {{fragment2_id}}
+jsonpath "$.fragment" not includes {{fragment1_id}}
