@@ -5,7 +5,7 @@ module.exports = async (req, res) => {
   const { headers } = req;
   const type = headers['content-type'];
 
-  if (!Fragment.isSupportedType(type) || Buffer.isBuffer(req.body) === false) {
+  if (!Fragment.isSupportedType(type) && Buffer.isBuffer(req.body) === false) {
     res.status(415).json(createErrorResponse(415, 'Type not supported'));
   } else {
     const ownerId = req.user;

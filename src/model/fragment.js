@@ -2,8 +2,10 @@
 const { nanoid } = require('nanoid');
 // Use https://www.npmjs.com/package/content-type to create/parse Content-Type headers
 const contentType = require('content-type');
-
+//const sharp = require('sharp');
 const logger = require('../logger');
+const md = require('markdown-it')();
+const sharp = require('sharp');
 
 // Functions for working with fragment metadata/data using our DB
 const {
@@ -187,6 +189,82 @@ class Fragment {
       return true;
     }
     return false;
+  }
+
+  // Returns true if the extension name satisfies the conversion of the type
+  isSupportedExt(extname) {
+    if (this.type == 'text/plain' && extname == '.txt') {
+      return true;
+    } else if (this.type == 'text/markdown') {
+      if (extname == '.md' || extname == '.html' || extname == '.txt') {
+        return true;
+      }
+    } else if (this.type == 'text/html') {
+      if (extname == '.html' || extname == '.txt') {
+        return true;
+      }
+    } else if (this.type == 'application/json') {
+      if (extname == '.json' || extname == '.txt') {
+        return true;
+      }
+    } else if (
+      this.type == 'image/png' ||
+      this.type == 'image/jpeg' ||
+      this.type == 'image/webp' ||
+      this.type == 'image/gif'
+    ) {
+      if (extname == '.png' || extname == '.jpg' || extname == '.webp' || extname == '.gif') {
+        return true;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  convertContentType(extname) {
+    if (extname == '.txt') {
+      return 'text/plain';
+    } else if (extname == '.md') {
+      return 'text/markdown';
+    } else if (extname == '.html') {
+      return 'text/html';
+    } else if (extname == '.json') {
+      return 'application/json';
+    } else if (extname == '.png') {
+      return 'image/png';
+    } else if (extname == '.jpg') {
+      return 'image/jpeg';
+    } else if (extname == '.webp') {
+      return 'image/webp';
+    } else if (extname == '.gif') {
+      return 'image/gif';
+    } else {
+      return this.mimeType;
+    }
+  }
+
+  async convertData(extname) {
+    try {
+      var data = await this.getData();
+      var converted;
+      if (extname == '.txt') {
+        converted = data.toString();
+      } else if (this.mimeType == 'text/markdown' && extname == '.html') {
+        converted = md.render(data.toString());
+      }
+      if (extname == '.png') {
+        converted = await sharp(data).png().toBuffer();
+      } else if (extname == '.jpg') {
+        converted = await sharp(data).jpeg({ quality: 100, chromaSubsampling: '4:4:4' }).toBuffer();
+      } else if (extname == '.webp') {
+        converted = await sharp(data).webp({ lossless: true }).toBuffer();
+      } else if (extname == '.gif') {
+        converted = await sharp(data).gif().toBuffer();
+      }
+      return converted;
+    } catch (err) {
+      throw new Error(err);
+    }
   }
 }
 

@@ -51,4 +51,5 @@ CMD ["dumb-init", "node", "/app/src/server.js"]
 # We run our service on port 8080
 EXPOSE 8080
 
-
+HEALTHCHECK  --interval=5m --timeout=3s \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/ || exit 1
