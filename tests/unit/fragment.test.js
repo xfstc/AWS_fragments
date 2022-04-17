@@ -246,5 +246,45 @@ describe('Fragment class', () => {
       await Fragment.delete('1234', fragment.id);
       expect(() => Fragment.byId('1234', fragment.id)).rejects.toThrow();
     });
+
+    test('"text/html" type can be converted via .txt', async () => {
+      const fragment = new Fragment({ ownerId: '1234', type: 'text/html', size: 0 });
+      await fragment.save();
+      await fragment.setData(Buffer.from('a'));
+
+      expect(fragment.isSupportedExt('.txt')).toBe(true);
+    });
+
+    test('"application/json" type can be converted via .txt', async () => {
+      const fragment = new Fragment({ ownerId: '1234', type: 'application/json', size: 0 });
+      await fragment.save();
+      await fragment.setData(Buffer.from('a'));
+
+      expect(fragment.isSupportedExt('.txt')).toBe(true);
+    });
+
+    test('"image/png" type can be converted via .jpg', async () => {
+      const fragment = new Fragment({ ownerId: '1234', type: 'image/png', size: 0 });
+      await fragment.save();
+      await fragment.setData(Buffer.from('a'));
+
+      expect(fragment.isSupportedExt('.jpg')).toBe(true);
+    });
+
+    test('Extension of ".html" returns the corresponding "text/html" content type', async () => {
+      const fragment = new Fragment({ ownerId: '1234', type: 'text/markdown', size: 0 });
+      await fragment.save();
+      await fragment.setData(Buffer.from('a'));
+
+      expect(fragment.convertContentType('.html')).toBe('text/html');
+    });
+
+    test('Extension of ".jpg" returns the corresponding "image/jpeg" content type', async () => {
+      const fragment = new Fragment({ ownerId: '1234', type: 'image/png', size: 0 });
+      await fragment.save();
+      await fragment.setData(Buffer.from('a'));
+
+      expect(fragment.convertContentType('.jpg')).toBe('image/jpeg');
+    });
   });
 });
